@@ -36,6 +36,23 @@ def static_handler(path):
     return send_from_directory('assets', path)
 
 
+@app.route('/render')
+def floor_renderer():
+    frm = request.args.get("from", "0", type=int)
+    id = request.args.get("id", "")
+
+    app.logger.warn("Rendering from {} to {}".format(frm, id))
+
+    floor = -1
+
+    if id.startswith('2'):
+        floor = 2
+    elif id.startswith('3'):
+        floor = 3
+
+    return render_template("map.html", floor=floor)
+
+
 @app.route('/route')
 def route():
     frm = request.args.get("from", "0", type=int)
@@ -54,13 +71,15 @@ def route():
             description = res[3]
         floor = res[2]
 
-    return render_template("route.html", description=description, floor=floor)
+    return render_template("route.html", description=description, floor=floor, from_id=frm, to_id=id)
 
 
 @app.route('/', methods=['GET'])
 def default_route():
     query = request.args.get("q", "")
+    frm = request.args.get("from", "")
     has_query = query != ""
+    has_from = frm != ""
     results = []
     if has_query:
         query1 = '%{}%'.format(query.lower())
@@ -74,4 +93,5 @@ def default_route():
             d['zhanr'] = r[2]
             d['room_id'] = r[3]
             results.append(d)
-    return render_template('index.html', has_query=has_query, no_results=(len(results) == 0), data=results)
+    return render_template('index.html', has_query=has_query, has_from=has_from, frm=frm,
+                           no_results=(len(results) == 0), data=results)

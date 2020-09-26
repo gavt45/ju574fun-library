@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="assets/css/Navigation-with-Search.css">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<body style="padding-top: 60px;">
+    <nav class="navbar fixed-top navbar-expand-xl navbar-light" style="background-color: #e3f2fd">
         <div class="container"><a class="navbar-brand" href="/">Ju574Fun library</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse"
                 id="navcol-1">
@@ -32,16 +32,23 @@
 
     <div class="container" style="margin-top: 1%;">
         <div class="card" style="width: 100%;">
-          <img src="assets/floors/{{ floor }}.png" class="card-img-top">
           <div class="card-body">
-            <h5 class="card-title">Как пройти?</h5>
-            <p class="card-text">{{ description }}</p>
-            <!-- a href="#" class="btn btn-primary">Переход куда-нибудь</a -->
+            {% if floor != -1 %}
+              {% for fl in range(1,floor+1) %}
+                <h5 class="card-title">{{ fl }} этаж:</h5>
+                <img src="assets/floors/{{ fl }}.png" class="card-img-top" style="margin-top: 5px;">
+              {% endfor %}
+            {% else %}
+                <img src="assets/floors/{{ floor }}.png" class="card-img-top" style="margin-top: 5px;">
+            {% endif %}
+              <h5 class="card-title">Как пройти?</h5>
+              <p class="card-text">{{ description }}</p>
+              <!-- a href="#" class="btn btn-primary">Переход куда-нибудь</a -->
           </div>
         </div>
     </div>
 
-    <div class="container" style="margin-top: 1%;">
+    <div class="container" style="margin-top: 1%; margin-bottom: 5%;">
         <div class="row justify-content-center">
             <a class="btn btn-success action-button" role="button" id="fuck-the-mom-button" href="/">Назад</a>
         </div>

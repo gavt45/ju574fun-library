@@ -39,16 +39,17 @@ def static_handler(path):
 @app.route('/route')
 def route():
     frm = request.args.get("from", "0", type=int)
-    id  = request.args.get("id", "", type=int)
+    id = request.args.get("id", "", type=int)
 
     description = locales.NO_ROUTE_AVAILABLE
     floor = -1
 
     app.logger.warn("From: {} to: {}".format(frm, id))
 
-    res = query_db("SELECT \"from\",\"to\",floor,route_description FROM ROUTES WHERE \"from\" = ? AND \"to\" = ?", [frm, id])
+    res = query_db("SELECT \"from\",\"to\",floor,route_description FROM ROUTES WHERE \"from\" = ? AND \"to\" = ?",
+                   [frm, id])
     if len(res) != 0:
-        res = res[0] # select first object from request
+        res = res[0]  # select first object from request
         if res[3] and res[3] != "":
             description = res[3]
         floor = res[2]
@@ -62,13 +63,15 @@ def default_route():
     has_query = query != ""
     results = []
     if has_query:
-        query = '%{}%'.format(query.lower())
-        res = query_db("SELECT title,author,some_shit,room_id FROM BOOKS WHERE title like ? OR author like ?", [query, query])
+        query1 = '%{}%'.format(query.lower())
+        query2 = '%{}%'.format(query.lower().capitalize())
+        res = query_db("SELECT title,author,some_shit,room_id FROM BOOKS WHERE title like ? OR author like ? "
+                       "OR title like ? OR author like ?", [query1, query1, query2, query2])
         for r in res:
             d = {}
-            d['title'] = r[0].capitalize()
-            d['author'] = r[1].capitalize()
+            d['title'] = r[0]
+            d['author'] = r[1]
             d['zhanr'] = r[2]
             d['room_id'] = r[3]
             results.append(d)
-    return render_template('index.html', any_results=has_query, data=results)
+    return render_template('index.html', has_query=has_query, no_results=(len(results) == 0), data=results)

@@ -47,10 +47,14 @@ def floor_renderer():
 
     if id.startswith('2'):
         floor = 2
-    elif id.startswith('3'):
+    if id.startswith('3'):
         floor = 3
+    if id.startswith('0') or id.startswith('1'):
+        floor = 1
 
-    return render_template("map.html", floor=floor)
+    app.logger.warn("FLOOR: {}".format(floor))
+
+    return render_template("map.html", floor=floor, invalid_input=floor == -1)
 
 
 @app.route('/route')
@@ -70,8 +74,10 @@ def route():
         if res[3] and res[3] != "":
             description = res[3]
         floor = res[2]
+    else:
+        floor = 0
 
-    return render_template("route.html", description=description, floor=floor, from_id=frm, to_id=id)
+    return render_template("route.html", description=description, floor=floor, has_from=frm!=0, from_id=frm, to_id=id)
 
 
 @app.route('/', methods=['GET'])

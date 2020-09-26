@@ -1,4 +1,5 @@
 from flask import Flask, request, send_from_directory, render_template, g
+import locales
 import sqlite3
 
 app = Flask(__name__)
@@ -37,8 +38,22 @@ def static_handler(path):
 
 @app.route('/route')
 def route():
+    frm = request.args.get("from", "0", type=int)
+    id  = request.args.get("id", "", type=int)
 
-    return render_template("route.html")
+    description = locales.NO_ROUTE_AVAILABLE
+    floor = -1
+
+    app.logger.warn("From: {} to: {}".format(frm, id))
+
+    res = query_db("SELECT \"from\",\"to\",floor,route_description FROM ROUTES WHERE \"from\" = ? AND \"to\" = ?", [frm, id])
+    if len(res) != 0:
+        res = res[0] # select first object from request
+        if res[3] and res[3] != "":
+            description = res[3]
+        floor = res[2]
+
+    return render_template("route.html", description=description, floor=floor)
 
 
 @app.route('/', methods=['GET'])

@@ -50,22 +50,24 @@ def floor_renderer():
     app.logger.warn("Rendering from {} to {}".format(frm, id))
 
     floor = -1
+    frm_floor = 1
 
-    if (not os.path.exists("assets/pathes/{}_{}_1.png".format(frm, id)) or not os.path.exists(
+    if (not os.path.exists("assets/pathes/{}_{}_1.png".format(frm, id)) and not os.path.exists(
             "assets/pathes/{}_{}_2.png".format(frm, id))) and id != "":
+        app.logger.warn("Rendering {} to {} again".format(frm, id))
         floor = pathfinder.find_path(frm, id, "assets/pathes/{}_{}".format(frm, id), app.logger)
     elif id != "":
         floor = 2
-    # if id.startswith('2'):
-    #     floor = 2
-    # if id.startswith('3'):
-    #     floor = 3
-    # if id.startswith('0') or id.startswith('1'):
-    #     floor = 1
+    if str(frm).startswith('2'):
+        frm_floor = 2
+    if str(frm).startswith('3'):
+        frm_floor = 3
+    if str(frm).startswith('0') or str(frm).startswith('1'):
+        frm_floor = 1
 
     # app.logger.warn("FLOOR: {}".format(floor))
 
-    return render_template("map.html", floor=floor, invalid_input=floor == -1, frm=frm, to=id)
+    return render_template("map.html", first_floor=frm_floor, floor=floor, invalid_input=floor == -1, frm=frm, to=id)
 
 
 @app.route('/route')

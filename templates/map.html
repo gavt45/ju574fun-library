@@ -1,5 +1,5 @@
 {% if not invalid_input %}
-{% for fl in range(1,floor+1) %}
+{% for fl in range(first_floor, floor+1) %}
     <h2 class="card-title">{{ fl }} этаж:</h2>
     <img src="assets/pathes/{{ frm }}_{{ to }}_{{ fl }}.png" class="card-img-top" style="margin-top: 5px; width: 120%; height: auto;">
 {% endfor %}

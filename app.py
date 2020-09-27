@@ -90,14 +90,15 @@ def default_route():
     if has_query:
         query1 = '%{}%'.format(query.lower())
         query2 = '%{}%'.format(query.lower().capitalize())
-        res = query_db("SELECT title,author,some_shit,room_id FROM BOOKS WHERE title like ? OR author like ? "
+        res = query_db("SELECT title,author,some_shit,status,room_id FROM BOOKS WHERE title like ? OR author like ? "
                        "OR title like ? OR author like ?", [query1, query1, query2, query2])
         for r in res:
             d = {}
             d['title'] = r[0]
             d['author'] = r[1]
             d['zhanr'] = r[2]
-            d['room_id'] = r[3]
+            d['status'] = r[3]
+            d['room_id'] = r[4]
             results.append(d)
     return render_template('index.html', has_query=has_query, has_from=has_from, frm=frm,
                            no_results=(len(results) == 0), data=results)

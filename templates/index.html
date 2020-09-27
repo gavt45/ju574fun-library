@@ -67,7 +67,16 @@
             <div class="row" style="margin-top: 5pt;">
                 <div class="card" style="width: 100%;">
                     <div class="card-body">
-                        <h5 class="card-title">{{ result['title'] }} от автора {{ result['author'] }}</h5>
+                        <h5 class="card-title">{{ result['title'] }} от автора {{ result['author'] }}
+                            {% if result['status'] == 'av' %}
+                                <div class="badge badge-success text-wrap" style="width: 6rem;">
+                                  В наличии
+                                </div>
+                            {% else %}
+                                <div class="badge badge-warning text-wrap" style="width: 6rem;">
+                                  На руках
+                                </div>
+                            {% endif %}</h5>
                         <!-- <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6> -->
                         <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
                         <form action="route" method="get">

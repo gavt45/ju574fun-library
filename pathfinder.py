@@ -95,6 +95,46 @@ class BestPathFinder:
 
         self.floor_rooms = [(13, self.coords[self.lestnica1],),
                        (23, self.coords[self.lestnica2],)]  # формат - (кол-во комнат, координаты лестницы)
+        # self.g = [
+        #     [(self.enter, 0,), (self.enter_promej1, 1,)],  # enter, 0
+        #     [(self.enter, 1,), (self.enter_promej1, 0,), (self.enter_promej2, 1,), (self.teatr_prom, 1,)],  # enter_prom1, 1
+        #     [(self.enter_promej1, 1,), (self.teatr_prom, 0,), (self.teatr_prom_inner, 1,), (self.lestnica1, 1,)],  # teatr_prom, 2
+        #     [(self.teatr_prom, 1,), (self.teatr_prom_inner, 0,), (self.teatr, 1,)],  # teatr_prom_inner, 3
+        #     [(self.teatr_prom_inner, 1,), (self.teatr, 0,)],  # teatr, 4
+        #     [(self.teatr_prom, 1,), (self.lestnica1, 0,), (self.reg_prom, 1,), (self.lestnica2, 1)],  # lestnica1, 5
+        #     [(self.enter_promej1, 1,), (self.enter_promej2, 0,), (self.reg_prom, 1,), (self.lect, 1,)],  # enter_prom2, 6
+        #     [(self.enter_promej2, 1,), (self.reg_prom, 0,), (self.reg, 1,), (self.lestnica1, 1)],  # reg_prom7
+        #     [(self.reg_prom, 1,), (self.reg, 0,)],  # reg, 8
+        #     [(self.enter_promej2, 1,), (self.lect, 0,), (self.gard_prom, 1)],  # lect, 9
+        #     [(self.lect, 1,), (self.gard_prom, 0,), (self.gard, 1,), (self.sanuzel, 1)],  # gard_prom, 10
+        #     [(self.gard_prom, 1,), (self.gard, 0,)],  # gard, 11
+        #     [(self.gard_prom, 1,), (self.sanuzel, 0)],  # sanuzel, 12
+        #     #########################################################################
+        #     [(self.lestnica2, 0,), (self.formular, 1,), (self.lestnica1, 1)],  # lestnica, 13
+        #     [(self.lestnica2, 1,), (self.formular, 0,), (self.form_right_promej, 1,), (self.form_left_promej, 1,)],  # formular, 14
+        #     [(self.formular, 1,), (self.form_right_promej, 0,), (self.k207_right_promej, 1,)],  # form_right, 15
+        #     [(self.k207, 0,), (self.k207_right_promej, 1,)],  # k207, 16
+        #     [(self.k207, 1,), (self.k207_right_promej, 0,), (self.k208_right_promej_1, 1,)],  # k207_right, 17
+        #     [(self.k208, 0,), (self.k208_right_promej_1, 1,)],  # k208, 18
+        #     [(self.k208, 1,), (self.k208_right_promej_1, 0,), (self.k208_right_promej_2, 1,)],  # k208_right1, 19
+        #     [(self.k208_right_promej_1, 1,), (self.k208_right_promej_2, 0,), (self.k210_prom, 1,)],  # k208_right2, 20
+        #     [(self.k208_right_promej_2, 1,), (self.k210_prom, 0,), (self.k210, 1,), (self.k211, 1,), (self.k212, 1,)],  # k210_prom, 21
+        #     [(self.k210_prom, 1,), (self.k210, 0,)],  # k210, 22
+        #     [(self.k210_prom, 1,), (self.k211, 0,)],  # k211, 23
+        #     [(self.k210_prom, 1,), (self.k212, 0,)],  # k212, 24
+        #     [(self.formular, 1,), (self.k202, 0,)],  # k202, 125
+        #     [(self.formular, 1,), (self.form_left_promej, 0,), (self.form_left_promej_2, 1,)],  # form_left,26
+        #     [(self.form_left_promej, 1,), (self.form_left_promej_2, 0,), (self.tri_promej, 1,)],  # form_left2, 27
+        #     [(self.form_left_promej_2, 1), (self.tri_promej, 0,), (self.k205, 1,), (self.tri_promej_down, 1,)],  # tripromej, 28
+        #     [(self.tri_promej, 1,), (self.k205, 0,)],  # k205, 29
+        #     [(self.tri_promej, 1), (self.tri_promej_down, 0), (self.k203, 1,)],  # tripromleft, 30
+        #     [(self.tri_promej_down, 1,), (self.k203, 0,), (self.k203_prom1, 1,)],  # k203, 31
+        #     [(self.k203, 1,), (self.k203_prom1, 0,), (self.k203_prom2, 1,), (self.museum, 1)],  # k203_prom1, 32
+        #     [(self.k203_prom1, 1,), (self.k203_prom2, 0,), (self.k203a, 1)],  # k203_prom2, 33
+        #     [(self.k203_prom2, 1), (self.k203a, 0)],  # k203a, 34
+        #     [(self.k203_prom1, 1), (self.museum, 0)],  # museum, 35
+        # ]
+
         self.g = [
             [(self.enter, 0,), (self.enter_promej1, 1,)],  # enter, 0
             [(self.enter, 1,), (self.enter_promej1, 0,), (self.enter_promej2, 1,), (self.teatr_prom, 1,)],  # enter_prom1, 1
@@ -110,29 +150,29 @@ class BestPathFinder:
             [(self.gard_prom, 1,), (self.gard, 0,)],  # gard, 11
             [(self.gard_prom, 1,), (self.sanuzel, 0)],  # sanuzel, 12
             #########################################################################
-            [(self.lestnica2, 0,), (self.formular, 1,), (self.lestnica1, 1)],  # lestnica, 13
-            [(self.lestnica2, 1,), (self.formular, 0,), (self.form_right_promej, 1,), (self.form_left_promej, 1,)],  # formular, 14
-            [(self.formular, 1,), (self.form_right_promej, 0,), (self.k207_right_promej, 1,)],  # form_right, 15
-            [(self.k207, 0,), (self.k207_right_promej, 1,)],  # k207, 16
-            [(self.k207, 1,), (self.k207_right_promej, 0,), (self.k208_right_promej_1, 1,)],  # k207_right, 17
-            [(self.k208, 0,), (self.k208_right_promej_1, 1,)],  # k208, 18
-            [(self.k208, 1,), (self.k208_right_promej_1, 0,), (self.k208_right_promej_2, 1,)],  # k208_right1, 19
-            [(self.k208_right_promej_1, 1,), (self.k208_right_promej_2, 0,), (self.k210_prom, 1,)],  # k208_right2, 20
-            [(self.k208_right_promej_2, 1,), (self.k210_prom, 0,), (self.k210, 1,), (self.k211, 1,), (self.k212, 1,)],  # k210_prom, 21
-            [(self.k210_prom, 1,), (self.k210, 0,)],  # k210, 22
-            [(self.k210_prom, 1,), (self.k211, 0,)],  # k211, 23
-            [(self.k210_prom, 1,), (self.k212, 0,)],  # k212, 24
-            [(self.formular, 1,), (self.k202, 0,)],  # k202, 125
-            [(self.formular, 1,), (self.form_left_promej, 0,), (self.form_left_promej_2, 1,)],  # form_left,26
-            [(self.form_left_promej, 1,), (self.form_left_promej_2, 0,), (self.tri_promej, 1,)],  # form_left2, 27
-            [(self.form_left_promej_2, 1), (self.tri_promej, 0,), (self.k205, 1,), (self.tri_promej_down, 1,)],  # tripromej, 28
-            [(self.tri_promej, 1,), (self.k205, 0,)],  # k205, 29
-            [(self.tri_promej, 1), (self.tri_promej_down, 0), (self.k203, 1,)],  # tripromleft, 30
-            [(self.tri_promej_down, 1,), (self.k203, 0,), (self.k203_prom1, 1,)],  # k203, 31
-            [(self.k203, 1,), (self.k203_prom1, 0,), (self.k203_prom2, 1,), (self.museum, 1)],  # k203_prom1, 32
-            [(self.k203_prom1, 1,), (self.k203_prom2, 0,), (self.k203a, 1)],  # k203_prom2, 33
-            [(self.k203_prom2, 1), (self.k203a, 0)],  # k203a, 34
-            [(self.k203_prom1, 1), (self.museum, 0)],  # museum, 35
+            [(self.lestnica2, 0,), (self.formular, 1,), (self.lestnica1, 1)], #lestnica, 13
+            [(self.lestnica2, 1,), (self.formular, 0,), (self.form_right_promej, 1,), (self.form_left_promej, 1,), (self.k202, 1)], #formular, 14
+            [(self.formular, 1,), (self.form_right_promej, 0,), (self.k207_right_promej, 1,)], #form_right, 15
+            [(self.k207, 0,), (self.k207_right_promej, 1,)], #k207, 16
+            [(self.k207, 1,), (self.k207_right_promej, 0,), (self.k208_right_promej_1, 1,)], #k207_right, 17
+            [(self.k208, 0,), (self.k208_right_promej_1, 1,)], #k208, 18
+            [(self.k208, 1,), (self.k208_right_promej_1, 0,), (self.k208_right_promej_2, 1,)], #k208_right1, 19
+            [(self.k208_right_promej_1, 1,), (self.k208_right_promej_2, 0,), (self.k210_prom, 1,)], #k208_right2, 20
+            [(self.k208_right_promej_2, 1,), (self.k210_prom, 0,), (self.k210, 1,), (self.k211, 1,), (self.k212, 1,)], #k210_prom, 21
+            [(self.k210_prom, 1,), (self.k210, 0,)], #k210, 22
+            [(self.k210_prom, 1,), (self.k211, 0,)], #k211, 23
+            [(self.k210_prom, 1,), (self.k212, 0,)], #k212, 24
+            [(self.formular, 1,), (self.k202, 0,), (self.form_left_promej, 1)], #k202, 25
+            [(self.formular, 1,), (self.form_left_promej, 0,), (self.form_left_promej_2, 1,), (self.k202, 1)], #form_left,26
+            [(self.form_left_promej, 1,), (self.form_left_promej_2, 0,), (self.tri_promej, 1,)], #form_left2, 27
+            [(self.form_left_promej_2, 1), (self.tri_promej, 0,), (self.k205, 1,), (self.tri_promej_down, 1,)], #tripromej, 28
+            [(self.tri_promej, 1,), (self.k205, 0,)], #k205, 29
+            [(self.tri_promej, 1), (self.tri_promej_down, 0), (self.k203, 1,)], #tripromleft, 30
+            [(self.tri_promej_down, 1,), (self.k203, 0,), (self.k203_prom1, 1,)], #k203, 31
+            [(self.k203, 1,), (self.k203_prom1, 0,), (self.k203_prom2, 1,), (self.museum, 1)], #k203_prom1, 32
+            [(self.k203_prom1, 1,), (self.k203_prom2, 0,), (self.k203a, 1)], #k203_prom2, 33
+            [(self.k203_prom2, 1), (self.k203a, 0)], #k203a, 34
+            [(self.k203_prom1, 1), (self.museum, 0)], #museum, 35
         ]
 
     def find_way(self, g, start, t):

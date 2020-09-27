@@ -1,202 +1,244 @@
 from PIL import Image, ImageDraw
 
-# class PathFinder:
-def find_way(g, start, t):
-    n = len(g)
-    INF = 10000000
-    d = [INF for i in range(n)]
-    p = [0 for i in range(n)]
-    d[start] = 0
-    u = [False for i in range(n)]
-    for i in range(n):
-        v = -1
-        for j in range(n):
-            if u[j] is False and (v == -1 or d[j] < d[v]):
-                v = j
-        if d[v] == INF:
-            break
-        u[v] = True
-        for j in range(len(g[v])):
-            to = g[v][j][0]
-            leng = g[v][j][1]
-            if d[v] + leng < d[to]:
-                d[to] = d[v] + leng
-                p[to] = v
-    path = []
-    v = t
-    while v != start:
-        path.append(v)
-        v = p[v]
 
-    path.append(start)
-    path.reverse()
-    return path
+class BestPathFinder:
+    def __init__(self):
+        self.image1 = Image.open('assets/floors/1.png')
+        self.image2 = Image.open('assets/floors/2.png')
+        self.akindofdb = {}
 
+        # ===================1=====================================#
+        self.enter = 0
+        self.enter_promej1 = 1
+        self.teatr_prom = 2
+        self.teatr_prom_inner = 3
+        self.teatr = 4
+        self.lestnica1 = 5
+        self.enter_promej2 = 6
+        self.reg_prom = 7
+        self.reg = 8
+        self.lect = 9
+        self.gard_prom = 10
+        self.gard = 11
+        self.sanuzel = 12
+        # ===================2=====================================#
+        self.lestnica2 = 13
+        self.formular = 14
+        self.form_right_promej = 15
+        self.k207 = 16
+        self.akindofdb[207] = self.k207
+        self.k207_right_promej = 17
+        self.k208 = 18
+        self.akindofdb[208] = self.k208
+        self.k208_right_promej_1 = 19
+        self.k208_right_promej_2 = 20
+        self.k210_prom = 21
+        self.k210 = 22
+        self.akindofdb[210] = self.k210
+        self.k212 = 23
+        self.akindofdb[212] = self.k212
+        self.k211 = 24
+        self.akindofdb[211] = self.k211
+        self.k202 = 25
+        self.akindofdb[202] = self.k202
+        self.form_left_promej = 26
+        self.form_left_promej_2 = 27
+        self.tri_promej = 28
+        self.k205 = 29
+        self.akindofdb[205] = self.k205
+        self.tri_promej_down = 30
+        self.k203 = 31
+        self.akindofdb[203] = self.k203
+        self.k203_prom1 = 32
+        self.k203_prom2 = 33
+        self.k203a = 34
+        self.museum = 35
 
-def draw_line(draw, x1, y1, x2, y2):
-    draw.line((x1, y1, x2, y2), fill=(220, 20, 60), width=15)
+        self.coords = [[0] for i in range(36)]
+        self.coords[self.lestnica1] = [970, 200]
+        self.coords[self.enter] = [1045, 580]
+        self.coords[self.enter_promej1] = [1045, 525]
+        self.coords[self.enter_promej2] = [890, 525]
+        self.coords[self.teatr_prom] = [1045, 300]
+        self.coords[self.teatr_prom_inner] = [1300, 300]
+        self.coords[self.teatr] = [1300, 150]
+        self.coords[self.sanuzel] = [625, 180]
+        self.coords[self.lect] = [620, 525]
+        self.coords[self.reg_prom] = [890, 350]
+        self.coords[self.reg] = [750, 350]
+        self.coords[self.gard_prom] = [620, 340]
+        self.coords[self.gard] = [545, 340]
 
-#===================1=====================================#
-enter = 0
-enter_promej1 = 1
-teatr_prom = 2
-teatr_prom_inner = 3
-teatr = 4
-lestnica1 = 5
-enter_promej2 = 6
-reg_prom = 7
-reg = 8
-lect = 9
-gard_prom = 10
-gard = 11
-sanuzel = 12
-#===================2=====================================#
-lestnica2 = 13
-formular = 14
-form_right_promej = 15
-k207 = 16
-k207_right_promej = 17
-k208 = 18
-k208_right_promej_1 = 19
-k208_right_promej_2 = 20
-k210_prom = 21
-k210 = 22
-k212 = 23
-k211 = 24
-k202 = 25
-form_left_promej = 26
-form_left_promej_2 = 27
-tri_promej = 28
-k205 = 29
-tri_promej_down = 30
-k203 = 31
-k203_prom1 = 32
-k203_prom2 = 33
-k203a = 34
-museum = 35
+        self.coords[self.lestnica2] = [3100, 600]
+        self.coords[self.formular] = [3100, 640]
+        self.coords[self.form_right_promej] = [3500, 640]
+        self.coords[self.k207] = [3750, 720]
+        self.coords[self.k207_right_promej] = [3750, 640]
+        self.coords[self.k208] = [4225, 720]
+        self.coords[self.k208_right_promej_1] = [4225, 640]
+        self.coords[self.k208_right_promej_2] = [4670, 640]
+        self.coords[self.k210_prom] = [4970, 640]
+        self.coords[self.k211] = [5100, 640]
+        self.coords[self.k210] = [4970, 720]
+        self.coords[self.k212] = [4970, 580]
+        self.coords[self.k202] = [2870, 800]
+        self.coords[self.form_left_promej] = [2650, 750]
+        self.coords[self.form_left_promej_2] = [2225, 750]
+        self.coords[self.tri_promej] = [2115, 750]
+        self.coords[self.tri_promej_down] = [2115, 820]
+        self.coords[self.k205] = [2115, 685]
+        self.coords[self.k203] = [2025, 820]
+        self.coords[self.k203_prom1] = [1700, 820]
+        self.coords[self.k203_prom2] = [1700, 650]
+        self.coords[self.k203a] = [1750, 650]
+        self.coords[self.museum] = [750, 800]
 
+        self.floor_rooms = [(13, self.coords[self.lestnica1],),
+                       (23, self.coords[self.lestnica2],)]  # формат - (кол-во комнат, координаты лестницы)
+        self.g = [
+            [(self.enter, 0,), (self.enter_promej1, 1,)],  # enter, 0
+            [(self.enter, 1,), (self.enter_promej1, 0,), (self.enter_promej2, 1,), (self.teatr_prom, 1,)],  # enter_prom1, 1
+            [(self.enter_promej1, 1,), (self.teatr_prom, 0,), (self.teatr_prom_inner, 1,), (self.lestnica1, 1,)],  # teatr_prom, 2
+            [(self.teatr_prom, 1,), (self.teatr_prom_inner, 0,), (self.teatr, 1,)],  # teatr_prom_inner, 3
+            [(self.teatr_prom_inner, 1,), (self.teatr, 0,)],  # teatr, 4
+            [(self.teatr_prom, 1,), (self.lestnica1, 0,), (self.reg_prom, 1,), (self.lestnica2, 1)],  # lestnica1, 5
+            [(self.enter_promej1, 1,), (self.enter_promej2, 0,), (self.reg_prom, 1,), (self.lect, 1,)],  # enter_prom2, 6
+            [(self.enter_promej2, 1,), (self.reg_prom, 0,), (self.reg, 1,), (self.lestnica1, 1)],  # reg_prom7
+            [(self.reg_prom, 1,), (self.reg, 0,)],  # reg, 8
+            [(self.enter_promej2, 1,), (self.lect, 0,), (self.gard_prom, 1)],  # lect, 9
+            [(self.lect, 1,), (self.gard_prom, 0,), (self.gard, 1,), (self.sanuzel, 1)],  # gard_prom, 10
+            [(self.gard_prom, 1,), (self.gard, 0,)],  # gard, 11
+            [(self.gard_prom, 1,), (self.sanuzel, 0)],  # sanuzel, 12
+            #########################################################################
+            [(self.lestnica2, 0,), (self.formular, 1,), (self.lestnica1, 1)],  # lestnica, 13
+            [(self.lestnica2, 1,), (self.formular, 0,), (self.form_right_promej, 1,), (self.form_left_promej, 1,)],  # formular, 14
+            [(self.formular, 1,), (self.form_right_promej, 0,), (self.k207_right_promej, 1,)],  # form_right, 15
+            [(self.k207, 0,), (self.k207_right_promej, 1,)],  # k207, 16
+            [(self.k207, 1,), (self.k207_right_promej, 0,), (self.k208_right_promej_1, 1,)],  # k207_right, 17
+            [(self.k208, 0,), (self.k208_right_promej_1, 1,)],  # k208, 18
+            [(self.k208, 1,), (self.k208_right_promej_1, 0,), (self.k208_right_promej_2, 1,)],  # k208_right1, 19
+            [(self.k208_right_promej_1, 1,), (self.k208_right_promej_2, 0,), (self.k210_prom, 1,)],  # k208_right2, 20
+            [(self.k208_right_promej_2, 1,), (self.k210_prom, 0,), (self.k210, 1,), (self.k211, 1,), (self.k212, 1,)],  # k210_prom, 21
+            [(self.k210_prom, 1,), (self.k210, 0,)],  # k210, 22
+            [(self.k210_prom, 1,), (self.k211, 0,)],  # k211, 23
+            [(self.k210_prom, 1,), (self.k212, 0,)],  # k212, 24
+            [(self.formular, 1,), (self.k202, 0,)],  # k202, 125
+            [(self.formular, 1,), (self.form_left_promej, 0,), (self.form_left_promej_2, 1,)],  # form_left,26
+            [(self.form_left_promej, 1,), (self.form_left_promej_2, 0,), (self.tri_promej, 1,)],  # form_left2, 27
+            [(self.form_left_promej_2, 1), (self.tri_promej, 0,), (self.k205, 1,), (self.tri_promej_down, 1,)],  # tripromej, 28
+            [(self.tri_promej, 1,), (self.k205, 0,)],  # k205, 29
+            [(self.tri_promej, 1), (self.tri_promej_down, 0), (self.k203, 1,)],  # tripromleft, 30
+            [(self.tri_promej_down, 1,), (self.k203, 0,), (self.k203_prom1, 1,)],  # k203, 31
+            [(self.k203, 1,), (self.k203_prom1, 0,), (self.k203_prom2, 1,), (self.museum, 1)],  # k203_prom1, 32
+            [(self.k203_prom1, 1,), (self.k203_prom2, 0,), (self.k203a, 1)],  # k203_prom2, 33
+            [(self.k203_prom2, 1), (self.k203a, 0)],  # k203a, 34
+            [(self.k203_prom1, 1), (self.museum, 0)],  # museum, 35
+        ]
 
-coords = [[0] for i in range(36)]
-coords[lestnica1] = [970, 200]
-coords[enter] = [1045, 580]
-coords[enter_promej1] = [1045, 525]
-coords[enter_promej2] = [890, 525]
-coords[teatr_prom] = [1045, 300]
-coords[teatr_prom_inner] = [1300, 300]
-coords[teatr] = [1300, 150]
-coords[sanuzel] = [625, 180]
-coords[lect] = [620, 525]
-coords[reg_prom] = [890, 350]
-coords[reg] = [750, 350]
-coords[gard_prom] = [620, 340]
-coords[gard] = [545, 340]
+    def find_way(self, g, start, t):
+        n = len(g)
+        INF = 10000000
+        d = [INF for i in range(n)]
+        p = [0 for i in range(n)]
+        d[start] = 0
+        u = [False for i in range(n)]
+        for i in range(n):
+            v = -1
+            for j in range(n):
+                if u[j] is False and (v == -1 or d[j] < d[v]):
+                    v = j
+            if d[v] == INF:
+                break
+            u[v] = True
+            for j in range(len(g[v])):
+                to = g[v][j][0]
+                leng = g[v][j][1]
+                if d[v] + leng < d[to]:
+                    d[to] = d[v] + leng
+                    p[to] = v
+        path = []
+        v = t
+        while v != start:
+            path.append(v)
+            v = p[v]
 
-coords[lestnica2] = [3100, 600]
-coords[formular] = [3100, 640]
-coords[form_right_promej] = [3500, 640]
-coords[k207] = [3750, 720]
-coords[k207_right_promej] = [3750, 640]
-coords[k208] = [4225, 720]
-coords[k208_right_promej_1] = [4225, 640]
-coords[k208_right_promej_2] = [4670, 640]
-coords[k210_prom] = [4970, 640]
-coords[k211] = [5100, 640]
-coords[k210] = [4970, 720]
-coords[k212] = [4970, 580]
-coords[k202] = [2870, 800]
-coords[form_left_promej] = [2650, 750]
-coords[form_left_promej_2] = [2225, 750]
-coords[tri_promej] = [2115, 750]
-coords[tri_promej_down] = [2115, 820]
-coords[k205] = [2115, 685]
-coords[k203] = [2025, 820]
-coords[k203_prom1] = [1700, 820]
-coords[k203_prom2] = [1700, 650]
-coords[k203a] = [1750, 650]
-coords[museum] = [750, 800]
+        path.append(start)
+        path.reverse()
+        return path
 
-floor_rooms = [(13, coords[lestnica1],), (23, coords[lestnica2],)] #формат - (кол-во комнат, координаты лестницы)
-g = [
-    [(enter, 0,), (enter_promej1, 1,)],  # enter, 0
-    [(enter, 1,), (enter_promej1, 0,), (enter_promej2, 1,), (teatr_prom, 1,)],  # enter_prom1, 1
-    [(enter_promej1, 1,), (teatr_prom, 0,), (teatr_prom_inner, 1,), (lestnica1, 1,)],  # teatr_prom, 2
-    [(teatr_prom, 1,), (teatr_prom_inner, 0,), (teatr, 1,)],  # teatr_prom_inner, 3
-    [(teatr_prom_inner, 1,), (teatr, 0,)],  # teatr, 4
-    [(teatr_prom, 1,), (lestnica1, 0,), (reg_prom, 1,), (lestnica2, 1)],  # lestnica1, 5
-    [(enter_promej1, 1,), (enter_promej2, 0,), (reg_prom, 1,), (lect, 1,)],  # enter_prom2, 6
-    [(enter_promej2, 1,), (reg_prom, 0,), (reg, 1,), (lestnica1, 1)],  # reg_prom7
-    [(reg_prom, 1,), (reg, 0,)],  # reg, 8
-    [(enter_promej2, 1,), (lect, 0,), (gard_prom, 1)],  # lect, 9
-    [(lect, 1,), (gard_prom, 0,), (gard, 1,), (sanuzel, 1)],  # gard_prom, 10
-    [(gard_prom, 1,), (gard, 0,)],  # gard, 11
-    [(gard_prom, 1,), (sanuzel, 0)],  # sanuzel, 12
-    #########################################################################
-    [(lestnica2, 0,), (formular, 1,), (lestnica1, 1)], #lestnica, 13
-    [(lestnica2, 1,), (formular, 0,), (form_right_promej, 1,), (form_left_promej, 1,)], #formular, 14
-    [(formular, 1,), (form_right_promej, 0,), (k207_right_promej, 1,)], #form_right, 15
-    [(k207, 0,), (k207_right_promej, 1,)], #k207, 16
-    [(k207, 1,), (k207_right_promej, 0,), (k208_right_promej_1, 1,)], #k207_right, 17
-    [(k208, 0,), (k208_right_promej_1, 1,)], #k208, 18
-    [(k208, 1,), (k208_right_promej_1, 0,), (k208_right_promej_2, 1,)], #k208_right1, 19
-    [(k208_right_promej_1, 1,), (k208_right_promej_2, 0,), (k210_prom, 1,)], #k208_right2, 20
-    [(k208_right_promej_2, 1,), (k210_prom, 0,), (k210, 1,), (k211, 1,), (k212, 1,)], #k210_prom, 21
-    [(k210_prom, 1,), (k210, 0,)], #k210, 22
-    [(k210_prom, 1,), (k211, 0,)], #k211, 23
-    [(k210_prom, 1,), (k212, 0,)], #k212, 24
-    [(formular, 1,), (k202, 0,)], #k202, 125
-    [(formular, 1,), (form_left_promej, 0,), (form_left_promej_2, 1,)], #form_left,26
-    [(form_left_promej, 1,), (form_left_promej_2, 0,), (tri_promej, 1,)], #form_left2, 27
-    [(form_left_promej_2, 1), (tri_promej, 0,), (k205, 1,), (tri_promej_down, 1,)], #tripromej, 28
-    [(tri_promej, 1,), (k205, 0,)], #k205, 29
-    [(tri_promej, 1), (tri_promej_down, 0), (k203, 1,)], #tripromleft, 30
-    [(tri_promej_down, 1,), (k203, 0,), (k203_prom1, 1,)], #k203, 31
-    [(k203, 1,), (k203_prom1, 0,), (k203_prom2, 1,), (museum, 1)], #k203_prom1, 32
-    [(k203_prom1, 1,), (k203_prom2, 0,), (k203a, 1)], #k203_prom2, 33
-    [(k203_prom2, 1), (k203a, 0)], #k203a, 34
-    [(k203_prom1, 1), (museum, 0)], #museum, 35
-]
-
-start = 0
-end = k202
-way = find_way(g, start, end)
-print(way)
-
-if end <= 13:
-    image = Image.open('assets/floors/1.png')
-    draw = ImageDraw.Draw(image)
-    x, y = coords[way[0]]
-    for w in way[1:]:
-        draw_line(draw, x, y, coords[w][0], coords[w][1])
-        x, y = coords[w]
-    image.show()
-elif end <= 35:
-    image2 = Image.open('assets/floors/2.png')
-    image1 = Image.open('assets/floors/1.png')
-    draw1 = ImageDraw.Draw(image1)
-    draw2 = ImageDraw.Draw(image2)
-    x, y = coords[way[0]]
-    idx = 0
-    for w in way[1:]:
-        idx += 1
-        draw_line(draw1, x, y, coords[w][0], coords[w][1])
-        x, y = coords[w]
-        if [x, y] == coords[lestnica1]:
-            break
-    x, y = coords[way[idx + 1]]
-    for w in way[idx+1:]:
-        draw_line(draw2, x, y, coords[w][0], coords[w][1])
-        x, y = coords[w]
-    image1.show()
-    image2.show()
+    def draw_line(self, draw, x1, y1, x2, y2):
+        draw.line((x1, y1, x2, y2), fill=(220, 20, 60), width=15)
 
 
-'''x, y = coords[way[0]]
-for w in way[1:]:
-    for i in range(1,len(floor_rooms)):
-        if coords.index([x, y]) < floor_rooms[i][0]:
-            image = Image.open(str(i) + 'floor.png') #стандартное название плана - 1floor, 2floor..., потом можно будет добавить возможность его менять
+    def find_path(self, _start, _end, out_files: str, logger):
+        """Finds path from `_start` to `_end` id and writes result to {`out_files`}_1.png and {`out_files`}_2.png
+            if the room is on the second floor
+            :returns maximum floor"""
+        self.image1 = Image.open('assets/floors/1.png')
+        self.image2 = Image.open('assets/floors/2.png')
+        try:
+            start = self.akindofdb[int(_start)]
+        except KeyError:
+            start = int(_start)
+        try:
+            end = self.akindofdb[int(_end)]
+        except KeyError:
+            end = int(_end)
+        # end = k203
+        logger.warn("Akindofdb: {}".format(self.akindofdb))
+        logger.warn("Pathfinder from {} to {}".format(start, end))
+        way = self.find_way(self.g, start, end)
+        logger.warn(way)
+
+        if end <= 13:
+            image = self.image1  # Image.open('assets/floors/1.png')
             draw = ImageDraw.Draw(image)
-            for j in range(len(way[:way.index(floor_rooms[i][0])])):
-                draw_line(draw, x, y, coords[w][0], coords[w][1])
-                x, y = coords[w]
-            image.show()'''
+            x, y = self.coords[way[0]]
+            for w in way[1:]:
+                self.draw_line(draw, x, y, self.coords[w][0], self.coords[w][1])
+                x, y = self.coords[w]
+            # image.show()
+            draw.ellipse((self.coords[start][0], self.coords[start][1], self.coords[start][0] + 4,
+                           self.coords[start][1] + 4), fill=(240, 20, 0))
+            image.save('{}_1.png'.format(out_files))
+            return 1
+        elif end <= 35:
+            image2 = self.image2  # Image.open('assets/floors/2.png')
+            image1 = self.image1  # Image.open('assets/floors/1.png')
+            draw1 = ImageDraw.Draw(image1)
+            draw2 = ImageDraw.Draw(image2)
+            x, y = self.coords[way[0]]
+            idx = 0
+            for w in way[1:]:
+                idx += 1
+                self.draw_line(draw1, x, y, self.coords[w][0], self.coords[w][1])
+                x, y = self.coords[w]
+                if [x, y] == self.coords[self.lestnica1]:
+                    break
+            if idx + 1 < len(way):
+                x, y = self.coords[way[idx + 1]]
+                for w in way[idx + 1:]:
+                    self.draw_line(draw2, x, y, self.coords[w][0], self.coords[w][1])
+                    x, y = self.coords[w]
+            if start > 13:
+                draw2.ellipse((self.coords[start][0],self.coords[start][1],self.coords[start][0]+30,self.coords[start][1]+30), fill=(240, 20, 0))
+            else:
+                draw1.ellipse((self.coords[start][0], self.coords[start][1], self.coords[start][0] + 30,
+                               self.coords[start][1] + 30), fill=(240, 20, 0))
+            # image1.show()
+            image1.save('{}_1.png'.format(out_files))
+            # image2.show()
+            image2.save('{}_2.png'.format(out_files))
+            return 2
+        return -1
+
+    '''x, y = coords[way[0]]
+    for w in way[1:]:
+        for i in range(1,len(floor_rooms)):
+            if coords.index([x, y]) < floor_rooms[i][0]:
+                image = Image.open(str(i) + 'floor.png') #стандартное название плана - 1floor, 2floor..., потом можно будет добавить возможность его менять
+                draw = ImageDraw.Draw(image)
+                for j in range(len(way[:way.index(floor_rooms[i][0])])):
+                    draw_line(draw, x, y, coords[w][0], coords[w][1])
+                    x, y = coords[w]
+                image.show()'''

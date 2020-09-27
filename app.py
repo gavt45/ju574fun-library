@@ -1,6 +1,8 @@
 from flask import Flask, request, send_from_directory, render_template, g
 import locales
+from pathfinder import BestPathFinder
 import sqlite3
+import os
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -8,6 +10,8 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.debug = True
 
 DATABASE = 'db/db.sqlite'
+
+pathfinder = BestPathFinder()
 
 
 def get_db():
@@ -45,16 +49,21 @@ def floor_renderer():
 
     floor = -1
 
-    if id.startswith('2'):
+    if (not os.path.exists("assets/pathes/{}_{}_1.png".format(frm, id)) or not os.path.exists(
+            "assets/pathes/{}_{}_2.png".format(frm, id))) and id != "":
+        floor = pathfinder.find_path(frm, id, "assets/pathes/{}_{}".format(frm, id), app.logger)
+    elif id != "":
         floor = 2
-    if id.startswith('3'):
-        floor = 3
-    if id.startswith('0') or id.startswith('1'):
-        floor = 1
+    # if id.startswith('2'):
+    #     floor = 2
+    # if id.startswith('3'):
+    #     floor = 3
+    # if id.startswith('0') or id.startswith('1'):
+    #     floor = 1
 
-    app.logger.warn("FLOOR: {}".format(floor))
+    # app.logger.warn("FLOOR: {}".format(floor))
 
-    return render_template("map.html", floor=floor, invalid_input=floor == -1)
+    return render_template("map.html", floor=floor, invalid_input=floor == -1, frm=frm, to=id)
 
 
 @app.route('/route')
@@ -77,7 +86,7 @@ def route():
     else:
         floor = 0
 
-    return render_template("route.html", description=description, floor=floor, has_from=frm!=0, from_id=frm, to_id=id)
+    return render_template("route.html", description=description, floor=floor, has_from=frm != 0, from_id=frm, to_id=id)
 
 
 @app.route('/', methods=['GET'])

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, send_from_directory, render_template, g
 import locales
 from pathfinder import BestPathFinder

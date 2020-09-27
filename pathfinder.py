@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw
-
 
 class BestPathFinder:
     def __init__(self):

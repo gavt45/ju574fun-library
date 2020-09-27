@@ -234,7 +234,7 @@ class BestPathFinder:
             end = int(_end)
         # end = k203
         logger.warn("Akindofdb: {}".format(self.akindofdb))
-        logger.warn("Pathfinder from {} to {}".format(start, end))
+        logger.warn("Pathfinder from {} to {} path: {}".format(start, end, out_files))
         way = self.find_way(self.g, start, end)
         logger.warn(way)
 
@@ -305,12 +305,16 @@ class BestPathFinder:
         lastopened = f
         image = Image.open('assets/floors/{}.png'.format(f))
         draw = ImageDraw.Draw(image)
+        draw.ellipse((x, y, x + 50, y + 50), fill=(240, 20, 0))
+        # logger.warn("Way: {}".format(way))
         for w in way[1:]:
             if [x, y, f] != self.floor_rooms[f - 1][1]:
                 self.draw_line(draw, x, y, self.coords[w][0], self.coords[w][1])
             x, y, f = self.coords[w]
+            # logger.warn("Adding coords: {}".format((x,y,f,lastopened)))
             if lastopened != f:
-                image.save('{}_{}.png'.format(out_files, f))
+                # logger.warn("Saving to {}".format('{}_{}.png'.format(out_files, f-1)))
+                image.save('{}_{}.png'.format(out_files, f-1))
                 image, lastopened = Image.open('assets/floors/{}.png'.format(f)), f  # стандартное название плана - 1floor, 2floor..., потом можно будет добавить возможность его менятьe
                 draw = ImageDraw.Draw(image)
         image.save('{}_{}.png'.format(out_files, f))

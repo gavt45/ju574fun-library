@@ -57,7 +57,7 @@ def floor_renderer():
         app.logger.warn("Rendering {} to {} again".format(frm, id))
         floor = pathfinder.find_path(frm, id, "assets/pathes/{}_{}".format(frm, id), app.logger)
     elif id != "":
-        floor = 2
+        floor = 1
     if str(frm).startswith('2'):
         frm_floor = 2
     if str(frm).startswith('3'):
